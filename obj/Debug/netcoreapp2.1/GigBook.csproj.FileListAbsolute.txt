@@ -1,0 +1,14 @@
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\obj\Debug\netcoreapp2.1\GigBook.csprojAssemblyReference.cache
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\obj\Debug\netcoreapp2.1\GigBook.csproj.CoreCompileInputs.cache
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\obj\Debug\netcoreapp2.1\GigBook.RazorAssemblyInfo.cache
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\obj\Debug\netcoreapp2.1\GigBook.RazorAssemblyInfo.cs
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\obj\Debug\netcoreapp2.1\GigBook.AssemblyInfoInputs.cache
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\obj\Debug\netcoreapp2.1\GigBook.AssemblyInfo.cs
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\bin\Debug\netcoreapp2.1\GigBook.deps.json
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\bin\Debug\netcoreapp2.1\GigBook.runtimeconfig.json
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\bin\Debug\netcoreapp2.1\GigBook.runtimeconfig.dev.json
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\bin\Debug\netcoreapp2.1\GigBook.dll
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\bin\Debug\netcoreapp2.1\GigBook.pdb
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\obj\Debug\netcoreapp2.1\GigBook.RazorTargetAssemblyInfo.cache
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\obj\Debug\netcoreapp2.1\GigBook.dll
+C:\Users\Mandy\Documents\Coding Dojo\CSharp\GigBook\obj\Debug\netcoreapp2.1\GigBook.pdb
