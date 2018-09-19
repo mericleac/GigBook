@@ -1,0 +1,13 @@
+.login {
+    background-color: white;
+    padding: 3% 5%;
+    width: 35%;
+    margin: 5% auto;
+    box-shadow: 3px 3px 3px grey;
+    border-radius: 5px;
+}
+
+.login .btn {
+    width: 100%;
+    margin-bottom: 5px;
+}

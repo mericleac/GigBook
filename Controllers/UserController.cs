@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Web;
 using System.Collections.Generic;
+using System;
 
 namespace GigBook.Controllers
 {
@@ -55,7 +56,7 @@ namespace GigBook.Controllers
             User emailTaken = _context.Users.SingleOrDefault(p => p.Email == user.Email);
             if (emailTaken != null)
             {
-                ViewBag.emailTaken = "This email has already been registered.";
+                return Json(new { error = new { Email = new[] {"Email has already been registered."} } });
             }
             else {
                 if (ModelState.IsValid)
@@ -75,17 +76,20 @@ namespace GigBook.Controllers
         [HttpPost("Login", Name = "LoginUser")]
         public ActionResult<User> LoginUser(LoginUser login)
         {
+            Console.WriteLine("HERE");
             User user = _context.Users.SingleOrDefault(p => p.Email == login.Email);
-            if (user != null) {
-                var Hasher = new PasswordHasher<User>();
-                var result = Hasher.VerifyHashedPassword(user, user.Password, login.Password);
-                if (result != 0)
-                {
-                    HttpContext.Session.SetInt32("LoggedInUser", user.UserId);
-                    return user;
+            if (ModelState.IsValid) {
+                if (user != null) {
+                    var Hasher = new PasswordHasher<User>();
+                    var result = Hasher.VerifyHashedPassword(user, user.Password, login.Password);
+                    if (result != 0)
+                    {
+                        HttpContext.Session.SetInt32("LoggedInUser", user.UserId);
+                        return user;
+                    }
                 }
             }
-            return NotFound();
+            return Json(new { loginError = "User could not be logged in.", errors = ModelState });
         }
     }
 }

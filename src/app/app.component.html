@@ -1,0 +1,23 @@
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">GigBook</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" [routerLink]="['/']">Home</a></li>
+            <li class="nav-item"><a class="nav-link" [routerLink]="['/musicians']">Browse Musicians</a></li>
+            <li class="nav-item"><a class="nav-link" [routerLink]="['/gigs']">My Gigs</a></li>
+            <li *ngIf="loggedInUser === null" class="nav-item"><a class="nav-link" [routerLink]="['/profile']">My Profile</a></li>
+            <li *ngIf="loggedInUser !== null" class="nav-item"><a class="nav-link" [routerLink]="['/profile']">{{ loggedInUser.name }}'s Profile</a></li>
+        </ul>
+        <a *ngIf="loggedInUser === null" class="nav-link" [routerLink]="['/login']">Login/Register</a>
+        <a *ngIf="loggedInUser !== null" class="nav-link" [routerLink]="['/addMusician']">Register as a musician</a>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Find Musicians">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+<router-outlet></router-outlet>

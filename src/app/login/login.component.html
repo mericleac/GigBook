@@ -1,0 +1,20 @@
+<div class="container login">
+    <h2>Login</h2>
+    <hr class="my-4">
+    <form (submit)="Login()">
+        <span class="error" *ngIf="errors.loginError">{{errors.loginError}}</span>
+        <span class="error" *ngIf="errors.Email">{{errors.Email}}</span>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" name="Email" [(ngModel)]="login.email">
+        </div>
+        <span class="error" *ngIf="errors.Password">{{errors.Password}}</span>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" name="Password" [(ngModel)]="login.password">
+            <small class="form-text text-muted"><a>Forgot your password?</a></small>
+        </div>
+        <input class="btn btn-success" type="submit" value="Log in">
+    </form>
+    <a [routerLink]="['/register']">Need to register?</a>
+</div>
