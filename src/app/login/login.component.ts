@@ -28,10 +28,7 @@ export class LoginComponent implements OnInit {
             .subscribe((data) => {
                 console.log(data);
                 console.log("HERE!!!!!");
-                if (data["userId"] != null) {
-                    this.app.loggedInUser = data;
-                    this.router.navigate([""]);
-                }
+                this.router.navigate([""]);
             },
             (err) => {
                 console.log(err['error']);

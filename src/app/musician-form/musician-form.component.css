@@ -1,0 +1,59 @@
+.newMusician {
+    background-color: white;
+    padding: 3% 5%;
+    width: 70%;
+    margin: 5% auto;
+    box-shadow: 3px 3px 3px grey;
+    border-radius: 5px;
+}
+
+.imageUpload {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    width: 40%;
+    padding: 3% 5%;
+}
+
+.image-cropper {
+    position: relative;
+    border-radius: 50%;
+    width: 100%;
+    height: auto;
+    padding-top: 100%;
+    background-size: cover;
+}
+
+.formInfo {
+    display: inline-block;
+    vertical-align: top;
+    width: 60%;
+    padding: 3% 0% 3% 5%;
+}
+
+a.btn-success {
+    color: white;
+    height: auto;
+    line-height: 2;
+    margin-top: 3vh;
+}
+
+a.btn-success:hover {
+    color: white;
+}
+
+.Instrument p {
+    display: inline-block;
+    vertical-align: top;
+    width: 60%;
+}
+
+.Instrument img {
+    height: 2vh;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.Instrument img:hover {
+    cursor: pointer;
+}

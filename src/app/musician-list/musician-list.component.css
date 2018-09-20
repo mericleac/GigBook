@@ -1,0 +1,21 @@
+.newMusician {
+    background-color: white;
+    padding: 3% 5%;
+    width: 60%;
+    margin: 5% auto;
+    box-shadow: 3px 3px 3px grey;
+    border-radius: 5px;
+}
+
+.imageUpload {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    width: 40%;
+}
+
+.formInfo {
+    display: inline-block;
+    vertical-align: top;
+    width: 60%;
+}

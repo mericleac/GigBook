@@ -17,11 +17,7 @@ namespace GigBook.Models
         [Range(0, 99)]
         public int YearsExperience {get;set;}
 
-        public List<MusicianInstruments> Musicians {get;set;}
-
-        public Instrument()
-        {
-            Musicians = new List<MusicianInstruments>();
-        }
+        public int MusicianId {get;set;}
+        public Musician Musician {get;set;}
     }
 }

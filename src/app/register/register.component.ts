@@ -26,10 +26,8 @@ export class RegisterComponent implements OnInit {
         let observable = this._httpService.registerUser(this.user);
         observable.subscribe((data) => {
             console.log(data);
-            if (data["userId"] != null) {
-                this.app.loggedInUser = data;
-                this.router.navigate(["/"]);
-            }
+            // this.app.getUser();
+            this.router.navigate(["/"]);
         },
         (err) => {
             console.log(err['error']);

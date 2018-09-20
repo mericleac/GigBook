@@ -38,6 +38,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _register_register_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./register/register.component */ "./src/app/register/register.component.ts");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _musician_form_musician_form_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./musician-form/musician-form.component */ "./src/app/musician-form/musician-form.component.ts");
+/* harmony import */ var _profile_profile_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./profile/profile.component */ "./src/app/profile/profile.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -49,10 +51,14 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
+
 var routes = [
     { path: "login", component: _login_login_component__WEBPACK_IMPORTED_MODULE_1__["LoginComponent"] },
     { path: "register", component: _register_register_component__WEBPACK_IMPORTED_MODULE_2__["RegisterComponent"] },
-    { path: "", component: _home_home_component__WEBPACK_IMPORTED_MODULE_0__["HomeComponent"] }
+    { path: "", component: _home_home_component__WEBPACK_IMPORTED_MODULE_0__["HomeComponent"] },
+    { path: "addMusician", component: _musician_form_musician_form_component__WEBPACK_IMPORTED_MODULE_5__["MusicianFormComponent"] },
+    { path: "profile", component: _profile_profile_component__WEBPACK_IMPORTED_MODULE_6__["ProfileComponent"] }
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
@@ -103,6 +109,7 @@ module.exports = "<nav class=\"navbar sticky-top navbar-expand-lg navbar-dark bg
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./http.service */ "./src/app/http.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -113,18 +120,35 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var AppComponent = /** @class */ (function () {
-    function AppComponent() {
+    function AppComponent(_httpService) {
+        this._httpService = _httpService;
         this.title = 'main';
         this.loggedInUser = null;
     }
+    AppComponent.prototype.getUser = function () {
+        var _this = this;
+        var observable = this._httpService.getLoggedInUser();
+        observable.subscribe(function (data) {
+            _this.loggedInUser = data;
+            if (data['musicianId'] != null) {
+                var observable_1 = _this._httpService.getMusicianById(data['musicianId']);
+                observable_1.subscribe(function (data) {
+                    _this.loggedInUser['musician'] = data;
+                });
+            }
+            ;
+        });
+    };
+    ;
     AppComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-root',
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_http_service__WEBPACK_IMPORTED_MODULE_1__["HttpService"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -154,12 +178,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _home_home_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./home/home.component */ "./src/app/home/home.component.ts");
 /* harmony import */ var _login_login_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./login/login.component */ "./src/app/login/login.component.ts");
 /* harmony import */ var _register_register_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./register/register.component */ "./src/app/register/register.component.ts");
+/* harmony import */ var _musician_form_musician_form_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./musician-form/musician-form.component */ "./src/app/musician-form/musician-form.component.ts");
+/* harmony import */ var _musician_list_musician_list_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./musician-list/musician-list.component */ "./src/app/musician-list/musician-list.component.ts");
+/* harmony import */ var _profile_profile_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./profile/profile.component */ "./src/app/profile/profile.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
 
 
 
@@ -180,7 +210,10 @@ var AppModule = /** @class */ (function () {
                 _app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"],
                 _home_home_component__WEBPACK_IMPORTED_MODULE_8__["HomeComponent"],
                 _login_login_component__WEBPACK_IMPORTED_MODULE_9__["LoginComponent"],
-                _register_register_component__WEBPACK_IMPORTED_MODULE_10__["RegisterComponent"]
+                _register_register_component__WEBPACK_IMPORTED_MODULE_10__["RegisterComponent"],
+                _musician_form_musician_form_component__WEBPACK_IMPORTED_MODULE_11__["MusicianFormComponent"],
+                _musician_list_musician_list_component__WEBPACK_IMPORTED_MODULE_12__["MusicianListComponent"],
+                _profile_profile_component__WEBPACK_IMPORTED_MODULE_13__["ProfileComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -301,6 +334,12 @@ var HttpService = /** @class */ (function () {
     HttpService.prototype.getLoggedInUser = function () {
         return this._http.get("/users/loggedIn");
     };
+    HttpService.prototype.addMusician = function (musician) {
+        return this._http.post("/musicians", musician);
+    };
+    HttpService.prototype.getMusicianById = function (id) {
+        return this._http.get("/musicians/" + id);
+    };
     HttpService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
             providedIn: 'root'
@@ -384,10 +423,7 @@ var LoginComponent = /** @class */ (function () {
             .subscribe(function (data) {
             console.log(data);
             console.log("HERE!!!!!");
-            if (data["userId"] != null) {
-                _this.app.loggedInUser = data;
-                _this.router.navigate([""]);
-            }
+            _this.router.navigate([""]);
         }, function (err) {
             console.log(err['error']);
             var errors = Object.keys(err['error']);
@@ -407,6 +443,290 @@ var LoginComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_http_service__WEBPACK_IMPORTED_MODULE_1__["HttpService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]])
     ], LoginComponent);
     return LoginComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/musician-form/musician-form.component.css":
+/*!***********************************************************!*\
+  !*** ./src/app/musician-form/musician-form.component.css ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".newMusician {\r\n    background-color: white;\r\n    padding: 3% 5%;\r\n    width: 70%;\r\n    margin: 5% auto;\r\n    box-shadow: 3px 3px 3px grey;\r\n    border-radius: 5px;\r\n}\r\n\r\n.imageUpload {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    text-align: center;\r\n    width: 40%;\r\n    padding: 3% 5%;\r\n}\r\n\r\n.image-cropper {\r\n    position: relative;\r\n    border-radius: 50%;\r\n    width: 100%;\r\n    height: auto;\r\n    padding-top: 100%;\r\n    background-size: cover;\r\n}\r\n\r\n.formInfo {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    width: 60%;\r\n    padding: 3% 0% 3% 5%;\r\n}\r\n\r\na.btn-success {\r\n    color: white;\r\n    height: auto;\r\n    line-height: 2;\r\n    margin-top: 3vh;\r\n}\r\n\r\na.btn-success:hover {\r\n    color: white;\r\n}\r\n\r\n.Instrument p {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    width: 60%;\r\n}\r\n\r\n.Instrument img {\r\n    height: 2vh;\r\n    display: inline-block;\r\n    vertical-align: top;\r\n}\r\n\r\n.Instrument img:hover {\r\n    cursor: pointer;\r\n}"
+
+/***/ }),
+
+/***/ "./src/app/musician-form/musician-form.component.html":
+/*!************************************************************!*\
+  !*** ./src/app/musician-form/musician-form.component.html ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container newMusician\">\n    <h2>Register as a Musician</h2>\n    <hr class=\"my-4\">\n    <form (submit)=\"AddMusician()\">\n        <div class=\"imageUpload\">\n            <h3>Add a Profile Picture</h3>\n            <div class=\"image-cropper\" [ngStyle]=\"{ 'background-image': 'url(' + ImageUrl + ')' }\"></div>\n            <label>Upload an image:</label>\n            <span *ngIf=\"errors.Image\" class=\"error\">{{ errors.Image }}</span>\n            <div class=\"input-group\">\n                <label class=\"input-group-btn\">\n                    <span class=\"btn btn-warning\">\n                        Browse&hellip; <input type=\"file\" style=\"display: none;\" multiple name=\"ImageUrl\" [(ngModel)]=\"Musician.ImageUrl\" (change)=\"UpdateImage($event)\">\n                    </span>\n                </label>\n                <input *ngIf=\"ImageUrl\" type=\"text\" class=\"form-control\" readonly name=\"ImageUrl\">\n            </div>\n        </div>\n        <div class=\"formInfo\">\n            <span class=\"error\" *ngIf=\"errors.Name\">{{ errors.Name }}</span>\n            <div class=\"form-group\">\n                <label>Name</label>\n                <input type=\"text\" class=\"form-control\" name=\"Name\" [(ngModel)]=\"Musician.Name\">\n            </div>\n            <span class=\"error\" *ngIf=\"errors.Summary\">{{ errors.Email }}</span>\n            <div class=\"form-group\">\n                <label>Summary</label>\n                <textarea class=\"form-control\" name=\"Summary\" [(ngModel)]=\"Musician.Summary\"></textarea>\n            </div>\n            <span class=\"error\" *ngIf=\"errors.Location\">{{ errors.Location }}</span>\n            <div class=\"form-group\">\n                <label>Location</label>\n                <input type=\"text\" class=\"form-control\" name=\"Location\" [(ngModel)]=\"Musician.Location\">\n            </div>\n            <h4>Add Instruments:</h4>\n            <div *ngFor=\"let instrument of Musician.Instruments\" class=\"Instrument\">\n                <p>{{instrument.Name}}, {{instrument.Family}}: {{ instrument.YearsExperience }} years</p><img src=\"https://cdn0.iconfinder.com/data/icons/basic-ui-elements-plain/385/010_x-512.png\" (click)=\"DeleteInstrument(instrument)\">\n            </div>\n            <div class=\"form-row\">\n                <div class=\"form-group col-sm-3\">\n                    <label>Name</label>\n                    <input class=\"form-control\" type=\"text\" name=\"InstrumentName\" [(ngModel)]=\"Instrument.Name\" placeholder=\"Name\">\n                </div>\n                <div class=\"form-group col-sm-3\">\n                    <label>Family</label>\n                    <select class=\"form-control\" name=\"InstrumentFamily\" [(ngModel)]=\"Instrument.Family\" placeholder=\"Family\">\n                        <option value=\"Woodwind\">Woodwind</option>\n                        <option value=\"Brass\">Brass</option>\n                        <option value=\"Percussion\">Percussion</option>\n                        <option value=\"String\">String</option>\n                        <option value=\"Keyboard\">Keyboard</option>\n                        <option value=\"Vocal\">Vocal</option>\n                        <option value=\"Other\">Other</option>\n                    </select>\n                </div>\n                <div class=\"form-group col-sm-4\">\n                    <label>Years of Experience</label>\n                    <input class=\"form-control\" type=\"text\" name=\"YearsExperience\" [(ngModel)]=\"Instrument.YearsExperience\" placeholder=\"Years of Experience\">\n                </div>\n                <div class=\"form-group col-sm-1\">\n                    <a class=\"btn btn-success\" (click)=\"AddInstrument()\">Add</a>\n                </div>\n            </div>\n            <input class=\"btn btn-success\" type=\"submit\" value=\"Register\">\n        </div>\n    </form>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/musician-form/musician-form.component.ts":
+/*!**********************************************************!*\
+  !*** ./src/app/musician-form/musician-form.component.ts ***!
+  \**********************************************************/
+/*! exports provided: MusicianFormComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MusicianFormComponent", function() { return MusicianFormComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../http.service */ "./src/app/http.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../app.component */ "./src/app/app.component.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var MusicianFormComponent = /** @class */ (function () {
+    function MusicianFormComponent(_httpService, router, app) {
+        this._httpService = _httpService;
+        this.router = router;
+        this.app = app;
+        this.ImageUrl = "http://www.epsomps.vic.edu.au/wp-content/uploads/2016/09/512x512-1-300x300.png";
+        this.Musician = {
+            Name: null,
+            Summary: null,
+            Location: null,
+            ImageUrl: null,
+            Instruments: []
+        };
+        this.Instrument = {
+            Name: null,
+            Family: null,
+            YearsExperience: null
+        };
+        this.urlReg = /()\w+(\.)+(jpg|png|jpeg|JPG|JPEG|PNG)/;
+        this.urlMessage = null;
+        this.errors = {};
+    }
+    MusicianFormComponent.prototype.ngOnInit = function () {
+        this.Musician.Name = this.app.loggedInUser.name;
+    };
+    MusicianFormComponent.prototype.UpdateImage = function (event) {
+        var _this = this;
+        console.log("HERE!");
+        if (this.urlReg.test(this.Musician.ImageUrl)) {
+            console.log("Good");
+            console.log(event);
+            var reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+            reader.onload = function (event) {
+                _this.ImageUrl = event.target['result'];
+                _this.Musician.ImageUrl = event.target['result'];
+            };
+        }
+        else {
+            console.log("Invalid");
+            this.errors['Image'] = "Not a valid image file.";
+        }
+    };
+    MusicianFormComponent.prototype.AddInstrument = function () {
+        this.Musician.Instruments.push(this.Instrument);
+        this.Instrument = {
+            Name: null,
+            Family: null,
+            YearsExperience: null
+        };
+    };
+    MusicianFormComponent.prototype.DeleteInstrument = function (data) {
+        for (var i = 0; i < this.Musician.Instruments.length; i++) {
+            if (this.Musician.Instruments[i] === data) {
+                this.Musician.Instruments.splice(i, 1);
+            }
+        }
+    };
+    MusicianFormComponent.prototype.AddMusician = function () {
+        var _this = this;
+        var observable = this._httpService.addMusician(this.Musician);
+        observable.subscribe(function (data) {
+            console.log(data);
+            if (data['MusicianId'] != null) {
+                _this.app.getUser();
+                _this.router.navigate(["/profile"]);
+            }
+        }, function (err) {
+            console.log(err['error']);
+            var errors = Object.keys(err['error']);
+            for (var i = 0; i < errors.length; i++) {
+                _this.errors[errors[i]] = err['error'][errors[i]][0];
+            }
+            ;
+        });
+    };
+    MusicianFormComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-musician-form',
+            template: __webpack_require__(/*! ./musician-form.component.html */ "./src/app/musician-form/musician-form.component.html"),
+            styles: [__webpack_require__(/*! ./musician-form.component.css */ "./src/app/musician-form/musician-form.component.css")]
+        }),
+        __metadata("design:paramtypes", [_http_service__WEBPACK_IMPORTED_MODULE_1__["HttpService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]])
+    ], MusicianFormComponent);
+    return MusicianFormComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/musician-list/musician-list.component.css":
+/*!***********************************************************!*\
+  !*** ./src/app/musician-list/musician-list.component.css ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".newMusician {\r\n    background-color: white;\r\n    padding: 3% 5%;\r\n    width: 60%;\r\n    margin: 5% auto;\r\n    box-shadow: 3px 3px 3px grey;\r\n    border-radius: 5px;\r\n}\r\n\r\n.imageUpload {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    text-align: center;\r\n    width: 40%;\r\n}\r\n\r\n.formInfo {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    width: 60%;\r\n}"
+
+/***/ }),
+
+/***/ "./src/app/musician-list/musician-list.component.html":
+/*!************************************************************!*\
+  !*** ./src/app/musician-list/musician-list.component.html ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n    Musician List works!\n</p>\n"
+
+/***/ }),
+
+/***/ "./src/app/musician-list/musician-list.component.ts":
+/*!**********************************************************!*\
+  !*** ./src/app/musician-list/musician-list.component.ts ***!
+  \**********************************************************/
+/*! exports provided: MusicianListComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MusicianListComponent", function() { return MusicianListComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var MusicianListComponent = /** @class */ (function () {
+    function MusicianListComponent() {
+    }
+    MusicianListComponent.prototype.ngOnInit = function () {
+    };
+    MusicianListComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-musician-list',
+            template: __webpack_require__(/*! ./musician-list.component.html */ "./src/app/musician-list/musician-list.component.html"),
+            styles: [__webpack_require__(/*! ./musician-list.component.css */ "./src/app/musician-list/musician-list.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], MusicianListComponent);
+    return MusicianListComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/profile/profile.component.css":
+/*!***********************************************!*\
+  !*** ./src/app/profile/profile.component.css ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/profile/profile.component.html":
+/*!************************************************!*\
+  !*** ./src/app/profile/profile.component.html ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container profile\">\n    <h2>{{ Name }}</h2>\n    <hr class=\"my-4\">\n    <div *ngIf=\"Musician != null\" class=\"musician\">\n        <div class=\"left\">\n            <div class=\"image-cropper\" [ngStyle]=\"{ 'background-image': 'url(' + Musician.ImageUrl + ')' }\"></div>\n        </div>\n        <div class=\"right\">\n            <h4>About {{ Musician.Name }}:</h4>\n            <p>{{ Musician.Summary }}</p>\n            <h4>Location:</h4>\n            <p>{{ Musician.Location }}</p>\n            <h4>Instruments:</h4>\n            <p *ngFor=\"let inst of Musician.Instruments\">{{ inst.Name }}, {{ inst.Family }} ({{ inst.YearsExperience }} years of experience)</p>\n        </div>\n    </div>\n    <div *ngIf=\"Musician == null\">\n        <p>You are not registered as a musician. Click <a [routerLink]=\"['/addMusician']\">here</a> to register as a musician now or <a href=\"['/addMusicians']\">here</a> to browse all current musicians</p>\n    </div>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/profile/profile.component.ts":
+/*!**********************************************!*\
+  !*** ./src/app/profile/profile.component.ts ***!
+  \**********************************************/
+/*! exports provided: ProfileComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProfileComponent", function() { return ProfileComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../app.component */ "./src/app/app.component.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ProfileComponent = /** @class */ (function () {
+    function ProfileComponent(app) {
+        this.app = app;
+        this.Name = null;
+        this.Musician = null;
+    }
+    ProfileComponent.prototype.ngOnInit = function () {
+        console.log(this.app.loggedInUser);
+        if (this.app.loggedInUser.Musician != null) {
+            this.Musician = this.app.loggedInUser.Musician;
+            if (this.Musician.Name == this.app.loggedInUser.Name) {
+                this.Name = this.Musician.Name;
+            }
+            else {
+                this.Name = "this.Musician.Name (" + this.app.loggedInUser.Name + ")";
+            }
+        }
+        else {
+            this.Name = this.app.loggedInUser.Name;
+        }
+    };
+    ProfileComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-profile',
+            template: __webpack_require__(/*! ./profile.component.html */ "./src/app/profile/profile.component.html"),
+            styles: [__webpack_require__(/*! ./profile.component.css */ "./src/app/profile/profile.component.css")]
+        }),
+        __metadata("design:paramtypes", [_app_component__WEBPACK_IMPORTED_MODULE_1__["AppComponent"]])
+    ], ProfileComponent);
+    return ProfileComponent;
 }());
 
 
@@ -482,10 +802,8 @@ var RegisterComponent = /** @class */ (function () {
         var observable = this._httpService.registerUser(this.user);
         observable.subscribe(function (data) {
             console.log(data);
-            if (data["userId"] != null) {
-                _this.app.loggedInUser = data;
-                _this.router.navigate(["/"]);
-            }
+            // this.app.getUser();
+            _this.router.navigate(["/"]);
         }, function (err) {
             console.log(err['error']);
             var errors = Object.keys(err['error']);

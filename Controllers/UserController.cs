@@ -1,12 +1,17 @@
-using Microsoft.AspNetCore.Mvc;
-using GigBook.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Web;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using GigBook.Models;
+using GigBook.Models.ViewModels;
 
 namespace GigBook.Controllers
 {
@@ -14,11 +19,18 @@ namespace GigBook.Controllers
     [ApiController]
     public class UserController : Controller
     {
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+
         private GigBookContext _context;
 
-        public UserController(GigBookContext context)
+        public UserController(GigBookContext context, 
+        UserManager<User> userManager, 
+        SignInManager<User> signInManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -28,68 +40,62 @@ namespace GigBook.Controllers
             return _context.Users.ToList();
         }
 
-        [HttpGet("{id}", Name = "GetUser")]
-        public ActionResult<User> GetUserById(int id)
-        {
-            User user =  _context.Users.SingleOrDefault(p => p.UserId == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return user;
-        }
+    //     [HttpGet("{id}", Name = "GetUser")]
+    //     public ActionResult<User> GetUserById(int id)
+    //     {
+    //         // User user =  _context.Users.SingleOrDefault(p => p.UserId == id);
+    //         if (user == null)
+    //         {
+    //             return NotFound();
+    //         }
+    //         return user;
+    //     }
 
-        [HttpGet("loggedIn", Name = "GetLoggedInUser")]
-        public ActionResult<User> GetLoggedInUser()
-        {
-            User user =  _context.Users.SingleOrDefault(p => p.UserId == HttpContext.Session.GetInt32("LoggedInUser"));
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return user;
-        }
+    //     [HttpGet("loggedIn", Name = "GetLoggedInUser")]
+    //     public ActionResult<User> GetLoggedInUser()
+    //     {
+    //         // User user =  _context.Users
+    //             // .Include(x => x.Musician)
+    //             // .SingleOrDefault(p => p.UserId == HttpContext.Session.GetInt32("LoggedInUser"));
+    //         // user.Musician = _context.Musicians.SingleOrDefault(x => x.MusicianId == user.MusicianId);
+    //         if (user == null)
+    //         {
+    //             return NotFound();
+    //         }
+    //         return user;
+    //     }
 
         [HttpPost("", Name = "NewUser")]
-        public ActionResult<User> NewUser(User user)
+        public async Task<IActionResult> NewUser(RegisterViewModel model)
         {
-            User emailTaken = _context.Users.SingleOrDefault(p => p.Email == user.Email);
-            if (emailTaken != null)
+            if (ModelState.IsValid)
             {
-                return Json(new { error = new { Email = new[] {"Email has already been registered."} } });
-            }
-            else {
-                if (ModelState.IsValid)
+                var user = new User { UserName = model.Email, Email = model.Email, Name = model.Name };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
                 {
-                    PasswordHasher<User> Hasher = new PasswordHasher<User>();
-                    user.Password = Hasher.HashPassword(user, user.Password);
-                    _context.Add(user);
-                    _context.SaveChanges();
-                    User currUser = _context.Users.SingleOrDefault(p => p.Email == user.Email);
-                    HttpContext.Session.SetInt32("LoggedInUser", currUser.UserId);
-                    return currUser;
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return Json(user);
                 }
+                ModelState.AddModelError(string.Empty, "User could not be logged in");
             }
             return NotFound();
         }
 
         [HttpPost("Login", Name = "LoginUser")]
-        public ActionResult<User> LoginUser(LoginUser login)
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginUser(LoginViewModel model)
         {
             Console.WriteLine("HERE");
-            User user = _context.Users.SingleOrDefault(p => p.Email == login.Email);
             if (ModelState.IsValid) {
-                if (user != null) {
-                    var Hasher = new PasswordHasher<User>();
-                    var result = Hasher.VerifyHashedPassword(user, user.Password, login.Password);
-                    if (result != 0)
-                    {
-                        HttpContext.Session.SetInt32("LoggedInUser", user.UserId);
-                        return user;
-                    }
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, true, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    return Json(new { result = "success" });
                 }
+                return NotFound(new { loginError = new[] {"User could not be logged in."} });
             }
-            return Json(new { loginError = "User could not be logged in.", errors = ModelState });
+            return NotFound(new { errors = ModelState });
         }
     }
 }

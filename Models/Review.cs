@@ -15,8 +15,13 @@ namespace GigBook.Models
         public DateTime CreatedAt {get;set;}
         public DateTime UpdatedAt {get;set;}
 
+        public int MusicianId {get;set;}
         public Musician Musician {get;set;}
+
+        public int UserId {get;set;}
         public User User {get;set;}
+
+        public int GigId {get;set;}
         public Gig Gig {get;set;}
 
         public Review()

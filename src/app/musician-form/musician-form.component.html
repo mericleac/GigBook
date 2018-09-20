@@ -1,0 +1,67 @@
+<div class="container newMusician">
+    <h2>Register as a Musician</h2>
+    <hr class="my-4">
+    <form (submit)="AddMusician()">
+        <div class="imageUpload">
+            <h3>Add a Profile Picture</h3>
+            <div class="image-cropper" [ngStyle]="{ 'background-image': 'url(' + ImageUrl + ')' }"></div>
+            <label>Upload an image:</label>
+            <span *ngIf="errors.Image" class="error">{{ errors.Image }}</span>
+            <div class="input-group">
+                <label class="input-group-btn">
+                    <span class="btn btn-warning">
+                        Browse&hellip; <input type="file" style="display: none;" multiple name="ImageUrl" [(ngModel)]="Musician.ImageUrl" (change)="UpdateImage($event)">
+                    </span>
+                </label>
+                <input *ngIf="ImageUrl" type="text" class="form-control" readonly name="ImageUrl">
+            </div>
+        </div>
+        <div class="formInfo">
+            <span class="error" *ngIf="errors.Name">{{ errors.Name }}</span>
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" name="Name" [(ngModel)]="Musician.Name">
+            </div>
+            <span class="error" *ngIf="errors.Summary">{{ errors.Email }}</span>
+            <div class="form-group">
+                <label>Summary</label>
+                <textarea class="form-control" name="Summary" [(ngModel)]="Musician.Summary"></textarea>
+            </div>
+            <span class="error" *ngIf="errors.Location">{{ errors.Location }}</span>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" class="form-control" name="Location" [(ngModel)]="Musician.Location">
+            </div>
+            <h4>Add Instruments:</h4>
+            <div *ngFor="let instrument of Musician.Instruments" class="Instrument">
+                <p>{{instrument.Name}}, {{instrument.Family}}: {{ instrument.YearsExperience }} years</p><img src="https://cdn0.iconfinder.com/data/icons/basic-ui-elements-plain/385/010_x-512.png" (click)="DeleteInstrument(instrument)">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-3">
+                    <label>Name</label>
+                    <input class="form-control" type="text" name="InstrumentName" [(ngModel)]="Instrument.Name" placeholder="Name">
+                </div>
+                <div class="form-group col-sm-3">
+                    <label>Family</label>
+                    <select class="form-control" name="InstrumentFamily" [(ngModel)]="Instrument.Family" placeholder="Family">
+                        <option value="Woodwind">Woodwind</option>
+                        <option value="Brass">Brass</option>
+                        <option value="Percussion">Percussion</option>
+                        <option value="String">String</option>
+                        <option value="Keyboard">Keyboard</option>
+                        <option value="Vocal">Vocal</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label>Years of Experience</label>
+                    <input class="form-control" type="text" name="YearsExperience" [(ngModel)]="Instrument.YearsExperience" placeholder="Years of Experience">
+                </div>
+                <div class="form-group col-sm-1">
+                    <a class="btn btn-success" (click)="AddInstrument()">Add</a>
+                </div>
+            </div>
+            <input class="btn btn-success" type="submit" value="Register">
+        </div>
+    </form>
+</div>

@@ -11,13 +11,19 @@ import { HttpModule } from '@angular/http';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { MusicianFormComponent } from './musician-form/musician-form.component';
+import { MusicianListComponent } from './musician-list/musician-list.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    MusicianFormComponent,
+    MusicianListComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

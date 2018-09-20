@@ -30,6 +30,8 @@ namespace GigBook.Models
         public int MusicianId {get;set;}
         public Musician Musician {get;set;}
 
+        public int ReviewId {get;set;}
+
         public Gig()
         {
             CreatedAt = DateTime.Now;
