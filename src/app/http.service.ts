@@ -28,4 +28,8 @@ export class HttpService {
     getMusicianById(id) {
         return this._http.get("/musicians/" + id);
     }
+
+    getAllMusicians() {
+        return this._http.get("/musicians");
+    }
 }

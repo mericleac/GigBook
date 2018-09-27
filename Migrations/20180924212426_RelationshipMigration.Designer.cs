@@ -3,19 +3,64 @@ using System;
 using GigBook.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GigBook.Migrations
 {
     [DbContext(typeof(GigBookContext))]
-    partial class GigBookContextModelSnapshot : ModelSnapshot
+    [Migration("20180924212426_RelationshipMigration")]
+    partial class RelationshipMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("GigBook.Models.Gig", b =>
+                {
+                    b.Property<int>("GigId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Address")
+                        .IsRequired();
+
+                    b.Property<float>("Amount");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("Length");
+
+                    b.Property<bool>("MusicianConfirm");
+
+                    b.Property<int>("MusicianId");
+
+                    b.Property<string>("MusicianId1");
+
+                    b.Property<int>("ReviewId");
+
+                    b.Property<DateTime>("StartTime");
+
+                    b.Property<string>("Transaction");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<bool>("UserConfirm");
+
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1");
+
+                    b.HasKey("GigId");
+
+                    b.HasIndex("MusicianId1");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Gigs");
+                });
 
             modelBuilder.Entity("GigBook.Models.Instrument", b =>
                 {
@@ -25,20 +70,87 @@ namespace GigBook.Migrations
                     b.Property<string>("Family")
                         .IsRequired();
 
+                    b.Property<int>("MusicianId");
+
+                    b.Property<string>("MusicianId1");
+
                     b.Property<string>("Name")
                         .IsRequired();
-
-                    b.Property<int>("UserId");
-
-                    b.Property<string>("UserId1");
 
                     b.Property<int>("YearsExperience");
 
                     b.HasKey("InstrumentId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("MusicianId1");
 
                     b.ToTable("Instruments");
+                });
+
+            modelBuilder.Entity("GigBook.Models.PrivateMessage", b =>
+                {
+                    b.Property<int>("MessageId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("From");
+
+                    b.Property<string>("Message")
+                        .IsRequired();
+
+                    b.Property<int>("MusicianId");
+
+                    b.Property<string>("MusicianId1");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1");
+
+                    b.HasKey("MessageId");
+
+                    b.HasIndex("MusicianId1");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("PMs");
+                });
+
+            modelBuilder.Entity("GigBook.Models.Review", b =>
+                {
+                    b.Property<int>("ReviewId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("GigId");
+
+                    b.Property<int?>("GigId1");
+
+                    b.Property<int>("MusicianId");
+
+                    b.Property<string>("MusicianId1");
+
+                    b.Property<int>("Rating");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1");
+
+                    b.HasKey("ReviewId");
+
+                    b.HasIndex("GigId1");
+
+                    b.HasIndex("MusicianId1");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("GigBook.Models.User", b =>
@@ -81,8 +193,6 @@ namespace GigBook.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("Role");
 
                     b.Property<string>("SecurityStamp");
 
@@ -214,10 +324,47 @@ namespace GigBook.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("GigBook.Models.Gig", b =>
+                {
+                    b.HasOne("GigBook.Models.User", "Musician")
+                        .WithMany("GigRequests")
+                        .HasForeignKey("MusicianId1");
+
+                    b.HasOne("GigBook.Models.User", "User")
+                        .WithMany("GigsToPlay")
+                        .HasForeignKey("UserId1");
+                });
+
             modelBuilder.Entity("GigBook.Models.Instrument", b =>
                 {
-                    b.HasOne("GigBook.Models.User", "User")
+                    b.HasOne("GigBook.Models.User", "Musician")
                         .WithMany("Instruments")
+                        .HasForeignKey("MusicianId1");
+                });
+
+            modelBuilder.Entity("GigBook.Models.PrivateMessage", b =>
+                {
+                    b.HasOne("GigBook.Models.User", "Musician")
+                        .WithMany("UserPMs")
+                        .HasForeignKey("MusicianId1");
+
+                    b.HasOne("GigBook.Models.User", "User")
+                        .WithMany("MusicianPMs")
+                        .HasForeignKey("UserId1");
+                });
+
+            modelBuilder.Entity("GigBook.Models.Review", b =>
+                {
+                    b.HasOne("GigBook.Models.Gig", "Gig")
+                        .WithMany()
+                        .HasForeignKey("GigId1");
+
+                    b.HasOne("GigBook.Models.User", "Musician")
+                        .WithMany("MyReviews")
+                        .HasForeignKey("MusicianId1");
+
+                    b.HasOne("GigBook.Models.User", "User")
+                        .WithMany("MusicianReviews")
                         .HasForeignKey("UserId1");
                 });
 

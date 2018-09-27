@@ -12,9 +12,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using GigBook.Models;
 using GigBook.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace GigBook.Controllers
 {
+    // [Authorize(Policy = "MusicianRoles")]
     [Route("users")]
     [ApiController]
     public class UserController : Controller
@@ -51,33 +53,32 @@ namespace GigBook.Controllers
     //         return user;
     //     }
 
-    //     [HttpGet("loggedIn", Name = "GetLoggedInUser")]
-    //     public ActionResult<User> GetLoggedInUser()
-    //     {
-    //         // User user =  _context.Users
-    //             // .Include(x => x.Musician)
-    //             // .SingleOrDefault(p => p.UserId == HttpContext.Session.GetInt32("LoggedInUser"));
-    //         // user.Musician = _context.Musicians.SingleOrDefault(x => x.MusicianId == user.MusicianId);
-    //         if (user == null)
-    //         {
-    //             return NotFound();
-    //         }
-    //         return user;
-    //     }
+        [HttpGet("loggedIn", Name = "GetLoggedInUser")]
+        public ActionResult<User> GetLoggedInUser()
+        {
+            User user = _userManager.FindByNameAsync(User.Identity.Name).Result;
+            if (user == null)
+            {
+                return NotFound();
+            }
+            User res = _context.Users
+                .Include(x => x.Instruments)
+                .SingleOrDefault(x => x.Id == user.Id);
+            return res;
+        }
 
         [HttpPost("", Name = "NewUser")]
         public async Task<IActionResult> NewUser(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email, Name = model.Name };
+                var user = new User { UserName = model.Email, Email = model.Email, Name = model.Name, Role = "User" };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return Json(user);
                 }
-                ModelState.AddModelError(string.Empty, "User could not be logged in");
             }
             return NotFound();
         }

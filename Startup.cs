@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using MySql.Data.EntityFrameworkCore;
 using MySql.Data.EntityFrameworkCore.Extensions;
+using System.Threading.Tasks;
+using System;
+using Newtonsoft.Json;
 
 namespace GigBook
 {
@@ -40,7 +43,11 @@ namespace GigBook
             // services.Configure<MySqlOptions>(Configuration.GetSection("DBInfo"));
             services.AddSession();
             services.AddMvc()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                    .AddJsonOptions(opt => {
+                        opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    });
+            services.AddAuthorization();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -48,7 +55,6 @@ namespace GigBook
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSession();
-            app.UseIdentity();
             app.UseAuthentication();
             app.UseMvc();
         }

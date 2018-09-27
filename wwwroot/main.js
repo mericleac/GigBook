@@ -40,6 +40,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _musician_form_musician_form_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./musician-form/musician-form.component */ "./src/app/musician-form/musician-form.component.ts");
 /* harmony import */ var _profile_profile_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./profile/profile.component */ "./src/app/profile/profile.component.ts");
+/* harmony import */ var _musician_list_musician_list_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./musician-list/musician-list.component */ "./src/app/musician-list/musician-list.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -53,12 +54,14 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
 var routes = [
     { path: "login", component: _login_login_component__WEBPACK_IMPORTED_MODULE_1__["LoginComponent"] },
     { path: "register", component: _register_register_component__WEBPACK_IMPORTED_MODULE_2__["RegisterComponent"] },
     { path: "", component: _home_home_component__WEBPACK_IMPORTED_MODULE_0__["HomeComponent"] },
     { path: "addMusician", component: _musician_form_musician_form_component__WEBPACK_IMPORTED_MODULE_5__["MusicianFormComponent"] },
-    { path: "profile", component: _profile_profile_component__WEBPACK_IMPORTED_MODULE_6__["ProfileComponent"] }
+    { path: "profile", component: _profile_profile_component__WEBPACK_IMPORTED_MODULE_6__["ProfileComponent"] },
+    { path: "musicians", component: _musician_list_musician_list_component__WEBPACK_IMPORTED_MODULE_7__["MusicianListComponent"] }
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
@@ -132,13 +135,7 @@ var AppComponent = /** @class */ (function () {
         var observable = this._httpService.getLoggedInUser();
         observable.subscribe(function (data) {
             _this.loggedInUser = data;
-            if (data['musicianId'] != null) {
-                var observable_1 = _this._httpService.getMusicianById(data['musicianId']);
-                observable_1.subscribe(function (data) {
-                    _this.loggedInUser['musician'] = data;
-                });
-            }
-            ;
+            return data;
         });
     };
     ;
@@ -240,7 +237,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".jumbotron-fluid {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    background: url(\"http://auserwirth.info/wp-content/uploads/2018/03/minimalist-animal-wallpapers-for-desktops-3-i-simple-background-minimalism-cat-drawing-animals-sitting-blue-background-wallpapers-hd-desktop-and-mobile-backgrounds.jpg\");\r\n    background-position: left bottom;\r\n    background-size: 100%;\r\n    width: 60%;\r\n    height: 50vh;\r\n    padding-left: 20%;\r\n}\r\n\r\n.container {\r\n    padding: 10% 0;\r\n}\r\n\r\n.info {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    width: 40%;\r\n    padding: 5%;\r\n}"
+module.exports = "img {\r\n    width: 40%;\r\n    display: inline-block;\r\n    vertical-align: top;\r\n}\r\n\r\n.title {\r\n    width: 50%;\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    text-align: right;\r\n    margin-top: 10%;\r\n}\r\n\r\n.title h1 {\r\n    font-size: 4.5rem;\r\n}\r\n\r\n.title p {\r\n    font-size: 1.8rem;\r\n}\r\n\r\n.container {\r\n    padding: 10% 0;\r\n}\r\n\r\n.info {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    width: 40%;\r\n    padding: 5%;\r\n}"
 
 /***/ }),
 
@@ -251,7 +248,7 @@ module.exports = ".jumbotron-fluid {\r\n    display: inline-block;\r\n    vertic
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"jumbotron-fluid\">\n    <div class=\"container\">\n        <h1 class=\"display-4\">Welcome to GigBook!</h1>\n        <p class=\"lead\">The popular booking site for hiring musicians</p>\n    </div>\n</div>\n<div class=\"info\">\n    <h2>Because everyone could use a little music</h2>\n    <p>GigBook is a user friendly booking website that promotes local musicians. Our algorithms are designed to give starting musicians a boost while providing our clients with music they will love.</p>\n</div>\n\n<h2>Featured Musicians:</h2>\n<!-- A list of musicians that are just starting out -->"
+module.exports = "<img src=\"assets/img/music-instruments.png\">\n<div class=\"title\">\n    <h1 class=\"display-4\">Welcome to GigBook!</h1>\n    <p class=\"lead\">The popular booking site for hiring musicians</p>\n</div>\n\n<h2>Featured Musicians:</h2>\n<!-- A list of musicians that are just starting out -->"
 
 /***/ }),
 
@@ -340,6 +337,9 @@ var HttpService = /** @class */ (function () {
     HttpService.prototype.getMusicianById = function (id) {
         return this._http.get("/musicians/" + id);
     };
+    HttpService.prototype.getAllMusicians = function () {
+        return this._http.get("/musicians");
+    };
     HttpService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
             providedIn: 'root'
@@ -422,7 +422,7 @@ var LoginComponent = /** @class */ (function () {
         observable
             .subscribe(function (data) {
             console.log(data);
-            console.log("HERE!!!!!");
+            _this.app.getUser();
             _this.router.navigate([""]);
         }, function (err) {
             console.log(err['error']);
@@ -561,8 +561,8 @@ var MusicianFormComponent = /** @class */ (function () {
         var observable = this._httpService.addMusician(this.Musician);
         observable.subscribe(function (data) {
             console.log(data);
-            if (data['MusicianId'] != null) {
-                _this.app.getUser();
+            if (data['id'] != null) {
+                _this.app.loggedInUser = data;
                 _this.router.navigate(["/profile"]);
             }
         }, function (err) {
@@ -596,7 +596,7 @@ var MusicianFormComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".newMusician {\r\n    background-color: white;\r\n    padding: 3% 5%;\r\n    width: 60%;\r\n    margin: 5% auto;\r\n    box-shadow: 3px 3px 3px grey;\r\n    border-radius: 5px;\r\n}\r\n\r\n.imageUpload {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    text-align: center;\r\n    width: 40%;\r\n}\r\n\r\n.formInfo {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    width: 60%;\r\n}"
+module.exports = ".side-bar {\r\n    position: fixed;\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    background-color: white;\r\n    padding: 3% 5%;\r\n    width: 20%;\r\n    margin: 3% auto;\r\n    box-shadow: 3px 3px 3px grey;\r\n    border-radius: 5px;\r\n    margin-left: 5%;\r\n}\r\n\r\n.accordion {\r\n    display: block;\r\n    text-align: left;\r\n    background-color: white;\r\n    border: none;\r\n    cursor: pointer;\r\n    transition: 0.4s;\r\n}\r\n\r\n.panel {\r\n    position: hidden;\r\n}\r\n\r\n.active, .accordian:hover {\r\n    color: darkgray;\r\n}\r\n\r\n.musicians {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    width: 60%;\r\n    margin-left: 25%;\r\n}\r\n\r\n.search-bar {\r\n    background-color: white;\r\n    padding: 0;\r\n    width: 100%;\r\n    height: 7vh;\r\n    margin: 5% auto;\r\n    box-shadow: 3px 3px 3px grey;\r\n    border-radius: 5px;\r\n    margin-left: 15%;\r\n}\r\n\r\n.search-bar input {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    border: none;\r\n    height: 100%;\r\n    font-size: 1.4rem;\r\n}\r\n\r\n.search-bar .form-control {\r\n    width: 80%;\r\n}\r\n\r\n.search-bar .btn {\r\n    width: 20%;;\r\n}\r\n\r\n.musician {\r\n    background-color: white;\r\n    padding: 3% 5%;\r\n    width: 100%;\r\n    margin: 5% auto;\r\n    box-shadow: 3px 3px 3px grey;\r\n    border-radius: 5px;\r\n    margin-left: 15%;\r\n}\r\n\r\n.image-cropper {\r\n    position: relative;\r\n    border-radius: 50%;\r\n    width: 100%;\r\n    height: auto;\r\n    padding-top: 100%;\r\n    background-size: cover;\r\n}\r\n\r\n.left {\r\n    width: 25%;\r\n    display: inline-block;\r\n    vertical-align: top;\r\n}\r\n\r\n.description {\r\n    width: 60%;\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    padding: 2% 10%;\r\n}\r\n\r\n.description ul {\r\n    list-style: none;\r\n}\r\n\r\n.description h5 {\r\n    font-weight: 400;\r\n}\r\n\r\n.description .offset {\r\n    margin-left: 10%;\r\n}\r\n\r\n.actions {\r\n    width: 15%;\r\n    display: inline-block;\r\n    vertical-align: top;\r\n}\r\n\r\n.actions .btn {\r\n    width: 100%;\r\n    margin-top: 25%;\r\n    color: white;\r\n}"
 
 /***/ }),
 
@@ -607,7 +607,7 @@ module.exports = ".newMusician {\r\n    background-color: white;\r\n    padding:
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n    Musician List works!\n</p>\n"
+module.exports = "<div class=\"side-bar\">\n    <h3>Filter Musicians</h3>\n    <form>\n        <h5>Location</h5>\n        <div class=\"form-check\">\n            <input class=\"form-check-input\" type=\"checkbox\" value=\"Chicago\">\n            <label>Chicago</label>\n        </div>\n        <div class=\"form-check\">\n            <input class=\"form-check-input\" type=\"checkbox\" value=\"New York\">\n            <label>New York</label>\n        </div>\n        <h5>Instrument</h5>\n        <button class=\"accordion\" data-toggle=\"collapse\" data-target=\"#woodwinds\">Woodwinds<span>+</span></button>\n        <div class=\"panel collapse\" id=\"woodwinds\">\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"All\">\n                <label>All</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Flute\">\n                <label>Flute</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Clarinet\">\n                <label>Clarinet</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Oboe\">\n                <label>Oboe</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Bassoon\">\n                <label>Bassoon</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Saxophone\">\n                <label>Saxophone</label>\n            </div>\n        </div>\n\n        <button class=\"accordion\" data-toggle=\"collapse\" data-target=\"#brass\">Brass<span>+</span></button>\n        <div class=\"panel collapse\" id=\"brass\">\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"All\">\n                <label>All</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Trumpet\">\n                <label>Trumpet</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Trombone\">\n                <label>Trombone</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Horn\">\n                <label>Horn</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Tuba\">\n                <label>Tuba</label>\n            </div>\n        </div>\n\n        <button class=\"accordion\" data-toggle=\"collapse\" data-target=\"#percussion\">Percussion<span>+</span></button>\n        <div class=\"panel collapse\" id=\"percussion\">\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"All\">\n                <label>All</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Marimba\">\n                <label>Marimba</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Timpani\">\n                <label>Timpani</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Auxiliary\">\n                <label>Aux.</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Drumset\">\n                <label>Drumset</label>\n            </div>\n        </div>\n        <button class=\"accordion\" data-toggle=\"collapse\" data-target=\"#strings\">Strings<span>+</span></button>\n        <div class=\"panel collapse\" id=\"strings\">\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"All\">\n                <label>All</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Violin\">\n                <label>Violin</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Viola\">\n                <label>Viola</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Cello\">\n                <label>Cello</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"String Bass\">\n                <label>String Bass</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Accoustic Guitar\">\n                <label>Accoustic Guitar</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Electric Guitar\">\n                <label>Electric Guitar</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Banjo\">\n                <label>Banjo</label>\n            </div>\n        </div>\n        <button class=\"accordion\" data-toggle=\"collapse\" data-target=\"#keyboard\">Keyboard<span>+</span></button>\n        <div class=\"panel collapse\" id=\"keyboard\">\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"All\">\n                <label>All</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Piano\">\n                <label>Piano</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Organ\">\n                <label>Organ</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Synthesizer\">\n                <label>Synthesizer</label>\n            </div>\n        </div>\n        <button class=\"accordion\" data-toggle=\"collapse\" data-target=\"#vocal\">Vocal<span>+</span></button>\n        <div class=\"panel collapse\" id=\"vocal\">\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"All\">\n                <label>All</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Soprano\">\n                <label>Soprano</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Alto\">\n                <label>Alto</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Tenor\">\n                <label>Tenor</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Bass\">\n                <label>Bass</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Jazz\">\n                <label>Jazz</label>\n            </div>\n        </div>\n        <button class=\"accordion\" data-toggle=\"collapse\" data-target=\"#other\">Other<span>+</span></button>\n        <div class=\"panel collapse\" id=\"other\">\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"All\">\n                <label>All</label>\n            </div>\n            <div class=\"form-check\">\n                <input class=\"form-check-input\" type=\"checkbox\" value=\"Conductor\">\n                <label>Conductor</label>\n            </div>\n        </div>\n        <h5>Years of Experience</h5>\n        <div class=\"slidecontainer\">\n            <p>Over {{ Filter.years }} year(s):</p>\n            <input type=\"range\" min=\"1\" max=\"25\" class=\"slider\" [ngModel]=\"Filter.years\">\n        </div>\n        <input type=\"submit\" class=\"btn btn-warning\" value=\"Filter\">\n    </form>\n</div>\n<div class=\"musicians\">\n    <form class=\"search-bar\">\n        <input class=\"form-control\" type=\"text\" placeholder=\"Search by name...\">\n        <input type=\"submit\" class=\"btn btn-success\" value=\"Search\">\n    </form>\n    <div *ngFor=\"let musician of Musicians\" class=\"musician\">\n        <div class=\"left\">\n            <div class=\"image-cropper\" [ngStyle]=\"{ 'background-image': 'url(' + musician.imageUrl + ')'}\"></div>\n        </div>\n        <div class=\"description\">\n            <h2>{{ musician.musicianName }} </h2>\n            <div class=\"offset\">\n                <h5>{{ musician.location }}</h5>\n                <h5>Instruments:</h5>\n                <ul>\n                    <li *ngFor=\"let inst of musician.instruments\">{{ inst.name }}, {{ inst.family }}</li>\n                </ul>\n            </div>\n        </div>\n        <div class=\"actions\">\n            <a class=\"btn btn-primary\" [routerLink]=\"['message', musician.id]\">Message</a>\n            <a class=\"btn btn-success\" [routerLink]=\"['request', musician.id]\">Request</a>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -622,6 +622,7 @@ module.exports = "<p>\n    Musician List works!\n</p>\n"
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MusicianListComponent", function() { return MusicianListComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../http.service */ "./src/app/http.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -632,10 +633,25 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var MusicianListComponent = /** @class */ (function () {
-    function MusicianListComponent() {
+    function MusicianListComponent(_httpService) {
+        this._httpService = _httpService;
+        this.Filter = {
+            location: null,
+            instruments: [],
+            years: 1
+        };
     }
     MusicianListComponent.prototype.ngOnInit = function () {
+        this.getAllMusicians();
+    };
+    MusicianListComponent.prototype.getAllMusicians = function () {
+        var _this = this;
+        var observable = this._httpService.getAllMusicians();
+        observable.subscribe(function (data) {
+            _this.Musicians = data;
+        });
     };
     MusicianListComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -643,7 +659,7 @@ var MusicianListComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./musician-list.component.html */ "./src/app/musician-list/musician-list.component.html"),
             styles: [__webpack_require__(/*! ./musician-list.component.css */ "./src/app/musician-list/musician-list.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_http_service__WEBPACK_IMPORTED_MODULE_1__["HttpService"]])
     ], MusicianListComponent);
     return MusicianListComponent;
 }());
@@ -659,7 +675,7 @@ var MusicianListComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = ".profile {\r\n    background-color: white;\r\n    padding: 3% 5%;\r\n    width: 70%;\r\n    margin: 5% auto;\r\n    box-shadow: 3px 3px 3px grey;\r\n    border-radius: 5px;\r\n}\r\n\r\n.image-cropper {\r\n    position: relative;\r\n    border-radius: 50%;\r\n    width: 100%;\r\n    height: auto;\r\n    padding-top: 100%;\r\n    background-size: cover;\r\n}\r\n\r\n.left {\r\n    display: inline-block;\r\n    width: 35%;\r\n    vertical-align: top;\r\n}\r\n\r\n.right {\r\n    display: inline-block;\r\n    vertical-align: top;\r\n    width: 65%;\r\n    padding: 2% 10%;\r\n}"
 
 /***/ }),
 
@@ -670,7 +686,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container profile\">\n    <h2>{{ Name }}</h2>\n    <hr class=\"my-4\">\n    <div *ngIf=\"Musician != null\" class=\"musician\">\n        <div class=\"left\">\n            <div class=\"image-cropper\" [ngStyle]=\"{ 'background-image': 'url(' + Musician.ImageUrl + ')' }\"></div>\n        </div>\n        <div class=\"right\">\n            <h4>About {{ Musician.Name }}:</h4>\n            <p>{{ Musician.Summary }}</p>\n            <h4>Location:</h4>\n            <p>{{ Musician.Location }}</p>\n            <h4>Instruments:</h4>\n            <p *ngFor=\"let inst of Musician.Instruments\">{{ inst.Name }}, {{ inst.Family }} ({{ inst.YearsExperience }} years of experience)</p>\n        </div>\n    </div>\n    <div *ngIf=\"Musician == null\">\n        <p>You are not registered as a musician. Click <a [routerLink]=\"['/addMusician']\">here</a> to register as a musician now or <a href=\"['/addMusicians']\">here</a> to browse all current musicians</p>\n    </div>\n</div>"
+module.exports = "<div class=\"container profile\">\n    <h2>{{ name }}</h2>\n    <hr class=\"my-4\">\n    <div *ngIf='user.role === \"Musician\"' class=\"musician\">\n        <div class=\"left\">\n            <div class=\"image-cropper\" [ngStyle]=\"{ 'background-image': 'url(' + user.imageUrl + ')' }\"></div>\n        </div>\n        <div class=\"right\">\n            <h4>About {{ user.musicianName }}:</h4>\n            <p>{{ user.summary }}</p>\n            <h4>Location:</h4>\n            <p>{{ user.location }}</p>\n            <h4>Instruments:</h4>\n            <p *ngFor=\"let inst of user.instruments\">{{ inst.name }}, {{ inst.family }} ({{ inst.yearsExperience }} years of experience)</p>\n        </div>\n    </div>\n    <div *ngIf=\"user.role != 'Musician'\">\n        <p>You are not registered as a musician. Click <a [routerLink]=\"['/addMusician']\">here</a> to register as a musician now or <a href=\"['/addMusicians']\">here</a> to browse all current musicians</p>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -686,6 +702,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProfileComponent", function() { return ProfileComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -697,25 +714,27 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+
 var ProfileComponent = /** @class */ (function () {
-    function ProfileComponent(app) {
+    function ProfileComponent(app, router) {
         this.app = app;
-        this.Name = null;
-        this.Musician = null;
+        this.router = router;
+        this.name = null;
+        this.user = null;
     }
     ProfileComponent.prototype.ngOnInit = function () {
         console.log(this.app.loggedInUser);
-        if (this.app.loggedInUser.Musician != null) {
-            this.Musician = this.app.loggedInUser.Musician;
-            if (this.Musician.Name == this.app.loggedInUser.Name) {
-                this.Name = this.Musician.Name;
+        if (this.app.loggedInUser !== null) {
+            this.user = this.app.loggedInUser;
+            if (this.user.role != "Musician" || this.user.name == this.user.musicianName) {
+                this.name = this.user.name;
             }
             else {
-                this.Name = "this.Musician.Name (" + this.app.loggedInUser.Name + ")";
+                this.name = this.user.musicianName + " (" + this.user.name + ")";
             }
         }
         else {
-            this.Name = this.app.loggedInUser.Name;
+            this.router.navigate(["/login"]);
         }
     };
     ProfileComponent = __decorate([
@@ -724,7 +743,7 @@ var ProfileComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./profile.component.html */ "./src/app/profile/profile.component.html"),
             styles: [__webpack_require__(/*! ./profile.component.css */ "./src/app/profile/profile.component.css")]
         }),
-        __metadata("design:paramtypes", [_app_component__WEBPACK_IMPORTED_MODULE_1__["AppComponent"]])
+        __metadata("design:paramtypes", [_app_component__WEBPACK_IMPORTED_MODULE_1__["AppComponent"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
     ], ProfileComponent);
     return ProfileComponent;
 }());
@@ -802,7 +821,7 @@ var RegisterComponent = /** @class */ (function () {
         var observable = this._httpService.registerUser(this.user);
         observable.subscribe(function (data) {
             console.log(data);
-            // this.app.getUser();
+            _this.app.getUser();
             _this.router.navigate(["/"]);
         }, function (err) {
             console.log(err['error']);

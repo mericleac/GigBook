@@ -17,12 +17,7 @@ export class AppComponent {
         let observable = this._httpService.getLoggedInUser();
         observable.subscribe((data) => {
             this.loggedInUser = data;
-            if (data['musicianId'] != null) {
-                let observable = this._httpService.getMusicianById(data['musicianId']);
-                observable.subscribe((data) => {
-                    this.loggedInUser['musician'] = data;
-                });
-            };
+            return data;
         });
     };
 }

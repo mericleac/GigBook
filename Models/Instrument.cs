@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 
 namespace GigBook.Models
@@ -17,7 +18,7 @@ namespace GigBook.Models
         [Range(0, 99)]
         public int YearsExperience {get;set;}
 
-        public int MusicianId {get;set;}
-        public Musician Musician {get;set;}
+        public int UserId {get;set;}
+        public User User {get;set;}
     }
 }

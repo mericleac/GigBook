@@ -11,30 +11,46 @@ namespace GigBook.Models
     public class User : IdentityUser
     {
         public string Name {get;set;}
+        public string Role {get;set;}
         public DateTime CreatedAt {get;set;}
         public DateTime UpdatedAt {get;set;}
 
-        public int MusicianId {get;set;}
-        public List<Review> Reviews {get;set;}
-        public List<Gig> Gigs {get;set;}
-        public List<PrivateMessage> PMs {get;set;}
+        // Musician properties
+        public string MusicianName {get;set;}
+        public string Summary {get;set;}
+        public string Location {get;set;}
+        public string ImageUrl {get;set;}
+        public List<Instrument> Instruments {get;set;}
+
+        // [InverseProperty("Musician")]
+        // public List<Review> MyReviews {get;set;}
+
+        // [InverseProperty("User")]
+        // public List<Review> MusicianReviews {get;set;}
+
+        // [InverseProperty("User")]
+        // public List<Gig> GigsToPlay {get;set;}
+
+        // [InverseProperty("Musician")]
+        // public List<Gig> GigRequests {get;set;}
+
+        // [InverseProperty("User")]
+        // public List<PrivateMessage> MusicianPMs {get;set;}
+
+        // [InverseProperty("Musician")]
+        // public List<PrivateMessage> UserPMs {get;set;}
 
         public User()
         {
-            Reviews = new List<Review>();
-            Gigs = new List<Gig>();
-            PMs = new List<PrivateMessage>();
+            // MyReviews = new List<Review>();
+            // MusicianReviews = new List<Review>();
+            // GigsToPlay = new List<Gig>();
+            // GigRequests = new List<Gig>();
+            // MusicianPMs = new List<PrivateMessage>();
+            // UserPMs = new List<PrivateMessage>();
+            Instruments = new List<Instrument>();
             CreatedAt = DateTime.Now;
             UpdatedAt = DateTime.Now;
         }
-    }
-
-    [NotMapped]
-    public class LoginUser
-    {
-        [Required(ErrorMessage="Email is required.")]
-        public string Email {get;set;}
-        [Required(ErrorMessage="Password is required.")]
-        public string Password {get;set;}
     }
 }

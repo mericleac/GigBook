@@ -1,12 +1,23 @@
-.jumbotron-fluid {
+img {
+    width: 40%;
     display: inline-block;
     vertical-align: top;
-    background: url("http://auserwirth.info/wp-content/uploads/2018/03/minimalist-animal-wallpapers-for-desktops-3-i-simple-background-minimalism-cat-drawing-animals-sitting-blue-background-wallpapers-hd-desktop-and-mobile-backgrounds.jpg");
-    background-position: left bottom;
-    background-size: 100%;
-    width: 60%;
-    height: 50vh;
-    padding-left: 20%;
+}
+
+.title {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top;
+    text-align: right;
+    margin-top: 10%;
+}
+
+.title h1 {
+    font-size: 4.5rem;
+}
+
+.title p {
+    font-size: 1.8rem;
 }
 
 .container {

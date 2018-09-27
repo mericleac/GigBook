@@ -1,20 +1,20 @@
 <div class="container profile">
-    <h2>{{ Name }}</h2>
+    <h2>{{ name }}</h2>
     <hr class="my-4">
-    <div *ngIf="Musician != null" class="musician">
+    <div *ngIf='user.role === "Musician"' class="musician">
         <div class="left">
-            <div class="image-cropper" [ngStyle]="{ 'background-image': 'url(' + Musician.ImageUrl + ')' }"></div>
+            <div class="image-cropper" [ngStyle]="{ 'background-image': 'url(' + user.imageUrl + ')' }"></div>
         </div>
         <div class="right">
-            <h4>About {{ Musician.Name }}:</h4>
-            <p>{{ Musician.Summary }}</p>
+            <h4>About {{ user.musicianName }}:</h4>
+            <p>{{ user.summary }}</p>
             <h4>Location:</h4>
-            <p>{{ Musician.Location }}</p>
+            <p>{{ user.location }}</p>
             <h4>Instruments:</h4>
-            <p *ngFor="let inst of Musician.Instruments">{{ inst.Name }}, {{ inst.Family }} ({{ inst.YearsExperience }} years of experience)</p>
+            <p *ngFor="let inst of user.instruments">{{ inst.name }}, {{ inst.family }} ({{ inst.yearsExperience }} years of experience)</p>
         </div>
     </div>
-    <div *ngIf="Musician == null">
+    <div *ngIf="user.role != 'Musician'">
         <p>You are not registered as a musician. Click <a [routerLink]="['/addMusician']">here</a> to register as a musician now or <a href="['/addMusicians']">here</a> to browse all current musicians</p>
     </div>
 </div>

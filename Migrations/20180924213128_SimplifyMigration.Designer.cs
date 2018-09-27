@@ -3,14 +3,16 @@ using System;
 using GigBook.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GigBook.Migrations
 {
     [DbContext(typeof(GigBookContext))]
-    partial class GigBookContextModelSnapshot : ModelSnapshot
+    [Migration("20180924213128_SimplifyMigration")]
+    partial class SimplifyMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,18 +27,18 @@ namespace GigBook.Migrations
                     b.Property<string>("Family")
                         .IsRequired();
 
+                    b.Property<int>("MusicianId");
+
+                    b.Property<string>("MusicianId1");
+
                     b.Property<string>("Name")
                         .IsRequired();
-
-                    b.Property<int>("UserId");
-
-                    b.Property<string>("UserId1");
 
                     b.Property<int>("YearsExperience");
 
                     b.HasKey("InstrumentId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("MusicianId1");
 
                     b.ToTable("Instruments");
                 });
@@ -81,8 +83,6 @@ namespace GigBook.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("Role");
 
                     b.Property<string>("SecurityStamp");
 
@@ -216,9 +216,9 @@ namespace GigBook.Migrations
 
             modelBuilder.Entity("GigBook.Models.Instrument", b =>
                 {
-                    b.HasOne("GigBook.Models.User", "User")
+                    b.HasOne("GigBook.Models.User", "Musician")
                         .WithMany("Instruments")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("MusicianId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

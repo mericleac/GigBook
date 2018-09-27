@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
         observable
             .subscribe((data) => {
                 console.log(data);
-                console.log("HERE!!!!!");
+                this.app.getUser();
                 this.router.navigate([""]);
             },
             (err) => {

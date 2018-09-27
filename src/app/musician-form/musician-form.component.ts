@@ -71,8 +71,8 @@ export class MusicianFormComponent implements OnInit {
         let observable = this._httpService.addMusician(this.Musician);
         observable.subscribe((data) => {
             console.log(data);
-            if (data['MusicianId'] != null) {
-                this.app.getUser();
+            if (data['id'] != null) {
+                this.app.loggedInUser = data;
                 this.router.navigate(["/profile"]);
             }
         },
