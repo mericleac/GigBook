@@ -18,18 +18,30 @@ export class MusicianFormComponent implements OnInit {
         Instruments: []
     }
     Instrument = {
-        Name: null,
-        Family: null,
-        YearsExperience: null
+        name: null,
+        family: null,
+        yearsExperience: null
     }
     urlReg = /()\w+(\.)+(jpg|png|jpeg|JPG|JPEG|PNG)/;
     urlMessage = null;
     errors = {};
+    action = "Register";
 
     constructor(private _httpService: HttpService, private router: Router, private app: AppComponent) { }
 
     ngOnInit() {
-        this.Musician.Name = this.app.loggedInUser.name;
+        if (this.app.loggedInUser.role === "Musician") {
+            this.Musician.Name = this.app.loggedInUser.musicianName;
+            this.Musician.Summary = this.app.loggedInUser.summary;
+            this.Musician.Location = this.app.loggedInUser.location;
+            this.Musician.ImageUrl = this.app.loggedInUser.imageUrl;
+            this.Musician.Instruments = this.app.loggedInUser.instruments;
+            this.ImageUrl = this.app.loggedInUser.imageUrl;
+            this.action = "Update";
+        }
+        else {
+            this.Musician.Name = this.app.loggedInUser.name;
+        }
     }
 
     UpdateImage(event) {
@@ -51,12 +63,17 @@ export class MusicianFormComponent implements OnInit {
     }
 
     AddInstrument() {
-        this.Musician.Instruments.push(this.Instrument);
-        this.Instrument = {
-            Name: null,
-            Family: null,
-            YearsExperience: null
-        };
+        if (this.Instrument.name !== null && this.Instrument.family !== null) {
+            this.Musician.Instruments.push(this.Instrument);
+            this.Instrument = {
+                name: null,
+                family: null,
+                yearsExperience: null
+            };
+        }
+        else {
+            this.errors['Instruments'] = "Name and Family fields are required.";
+        }
     }
 
     DeleteInstrument(data) {
@@ -68,20 +85,39 @@ export class MusicianFormComponent implements OnInit {
     }
 
     AddMusician() {
-        let observable = this._httpService.addMusician(this.Musician);
-        observable.subscribe((data) => {
-            console.log(data);
-            if (data['id'] != null) {
-                this.app.loggedInUser = data;
-                this.router.navigate(["/profile"]);
-            }
-        },
-        (err) => {
-            console.log(err['error']);
-            let errors = Object.keys(err['error']);
-            for (let i = 0; i < errors.length; i++) {
-                this.errors[errors[i]] = err['error'][errors[i]][0];
-            }; 
-        })
+        if (this.app.loggedInUser.role === "Musician") {
+            let observable = this._httpService.updateMusician(this.Musician);
+            observable.subscribe((data) => {
+                console.log(data);
+                if (data['id'] != null) {
+                    this.app.loggedInUser = data;
+                    this.router.navigate(["/profile"]);
+                }
+            },
+            (err) => {
+                console.log(err['error']);
+                let errors = Object.keys(err['error']);
+                for (let i = 0; i < errors.length; i++) {
+                    this.errors[errors[i]] = err['error'][errors[i]][0];
+                }; 
+            })
+        }
+        else {
+            let observable = this._httpService.addMusician(this.Musician);
+            observable.subscribe((data) => {
+                console.log(data);
+                if (data['id'] != null) {
+                    this.app.loggedInUser = data;
+                    this.router.navigate(["/profile"]);
+                }
+            },
+            (err) => {
+                console.log(err['error']);
+                let errors = Object.keys(err['error']);
+                for (let i = 0; i < errors.length; i++) {
+                    this.errors[errors[i]] = err['error'][errors[i]][0];
+                }; 
+            })
+        }
     }
 }

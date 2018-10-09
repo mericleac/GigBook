@@ -1,0 +1,40 @@
+<div class="gigs">
+    <div *ngIf="user.role == 'Musician'">
+        <h2>Client Requests</h2>
+        <hr class="my-4">
+        <div *ngFor="let gig of ClientGigs" class="gig">
+            <h3>Gig Request for {{gig.musician.musicianName}}</h3>
+            <p>Location: {{gig.address}}</p>
+            <p>Date and Time: {{gig.startTime}}</p>
+            <p>Payment Offer: ${{gig.amount}}</p>
+            <p *ngIf="gig.musicianConfirm && gig.userConfirm && gig.transaction">Status: Confirmed!</p>
+            <p *ngIf="gig.musicianConfirm && gig.userConfirm && !gig.transaction">Status: Transaction needed</p>
+            <div *ngIf="!gig.musicianConfirm && gig.userConfirm">
+                <p>Status: Musician approval needed</p>
+                <a  class="btn btn-success" [routerLink]="['/gig', gig.gigId]">Review and approve</a>
+            </div>
+            <p *ngIf="!gig.userConfirm && gig.musicianConfirm">Status: Client approval needed</p>
+        </div>
+    </div>
+
+    <h2>Your Requests</h2>
+    <hr class="my-4">
+    <p *ngIf="UserRequests.length == 0">You haven't made any requests yet! Click <a [routerLink]="['/musicians']">here</a> to find a musicians.</p>
+    <div *ngFor="let gig of UserRequests" class="gig">
+        <h3>Gig Request for {{gig.musician.musicianName}}</h3>
+        <p>Location: {{gig.address}}</p>
+        <p>Date and Time: {{gig.startTime}}</p>
+        <p>Payment Offer: ${{gig.amount}}</p>
+        <p *ngIf="gig.musicianConfirm && gig.userConfirm && gig.transaction">Status: Confirmed!</p>
+        <p *ngIf="!gig.musicianConfirm && gig.userConfirm">Status: Musician approval needed</p>
+        <div *ngIf="!gig.userConfirm && gig.musicianConfirm">
+            <p>Status: Client approval needed</p>
+            <a class="btn btn-success" [routerLink]="['/gig', gig.gigId]">Review and approve</a>
+        </div>
+        <div *ngIf="gig.musicianConfirm && gig.userConfirm && !gig.transaction">
+            <p>Status: Transaction needed</p>
+            <button class="btn btn-success" (click)="openCheckout(gig.gigId)">Pay now</button>
+        </div>
+    </div>
+
+</div>

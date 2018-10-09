@@ -14,6 +14,8 @@ import { RegisterComponent } from './register/register.component';
 import { MusicianFormComponent } from './musician-form/musician-form.component';
 import { MusicianListComponent } from './musician-list/musician-list.component';
 import { ProfileComponent } from './profile/profile.component';
+import { GigRequestComponent } from './gig-request/gig-request.component';
+import { GigListComponent } from './gig-list/gig-list.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { ProfileComponent } from './profile/profile.component';
     RegisterComponent,
     MusicianFormComponent,
     MusicianListComponent,
-    ProfileComponent
+    ProfileComponent,
+    GigRequestComponent,
+    GigListComponent
   ],
   imports: [
     BrowserModule,

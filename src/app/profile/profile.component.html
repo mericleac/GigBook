@@ -12,6 +12,9 @@
             <p>{{ user.location }}</p>
             <h4>Instruments:</h4>
             <p *ngFor="let inst of user.instruments">{{ inst.name }}, {{ inst.family }} ({{ inst.yearsExperience }} years of experience)</p>
+            <a *ngIf="currUser.id == user.id" class="btn btn-warning" [routerLink]="['/addMusician']">Edit</a>
+            <button *ngIf="currUser.id == user.id" class="btn btn-danger" (click)="deleteMusician()">Delete Profile</button>
+            <small *ngIf="currUser.id == user.id" class="text-muted">If you delete your musician profile, your login information and user information will be saved.</small>
         </div>
     </div>
     <div *ngIf="user.role != 'Musician'">

@@ -8,7 +8,7 @@ namespace GigBook.Models
         // base() calls the parent class' constructor passing the "options" parameter along
         public GigBookContext(DbContextOptions<GigBookContext> options) : base(options) { }
 
-        // public DbSet<Gig> Gigs {get;set;}
+        public DbSet<Gig> Gigs {get;set;}
         public DbSet<Instrument> Instruments {get;set;}
         // public DbSet<PrivateMessage> PMs {get;set;}
         // public DbSet<Review> Reviews {get;set;}

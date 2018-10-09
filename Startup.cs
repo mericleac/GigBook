@@ -11,6 +11,7 @@ using MySql.Data.EntityFrameworkCore.Extensions;
 using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json;
+using Stripe;
 
 namespace GigBook
 {
@@ -41,6 +42,7 @@ namespace GigBook
                 opt.Password.RequiredUniqueChars = 1;
             });
             // services.Configure<MySqlOptions>(Configuration.GetSection("DBInfo"));
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
             services.AddSession();
             services.AddMvc()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
@@ -52,6 +54,7 @@ namespace GigBook
 
         public void Configure(IApplicationBuilder app)
         {
+            StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSession();

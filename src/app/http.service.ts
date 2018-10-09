@@ -32,4 +32,37 @@ export class HttpService {
     getAllMusicians() {
         return this._http.get("/musicians");
     }
+
+    filterMusicians(filter) {
+        return this._http.post("/musicians/filter", filter);
+    }
+
+    updateMusician(musician) {
+        return this._http.put("/musicians", musician);
+    }
+
+    addGig(id, gig) {
+        console.log(id, gig, "Here");
+        return this._http.post("/gigs/" + id, gig);
+    }
+
+    updateGig(gig) {
+        return this._http.post("/gigs/update", gig);
+    }
+
+    gigById(id) {
+        return this._http.get("/gigs/" + id);
+    }
+
+    getMyGigs() {
+        return this._http.get("/gigs");
+    }
+
+    approvePayment(id) {
+        return this._http.get("/gigs/payment/" + id);
+    }
+
+    deleteMusician() {
+        return this._http.get("/musicians/delete");
+    }
 }

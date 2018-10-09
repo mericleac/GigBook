@@ -3,14 +3,16 @@ using System;
 using GigBook.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GigBook.Migrations
 {
     [DbContext(typeof(GigBookContext))]
-    partial class GigBookContextModelSnapshot : ModelSnapshot
+    [Migration("20180928143203_GigUpdateMigration")]
+    partial class GigUpdateMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

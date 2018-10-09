@@ -33,17 +33,18 @@
                 <input type="text" class="form-control" name="Location" [(ngModel)]="Musician.Location">
             </div>
             <h4>Add Instruments:</h4>
+            <span class="error" *ngIf="errors.Instruments">{{ errors.Instruments }}</span>
             <div *ngFor="let instrument of Musician.Instruments" class="Instrument">
-                <p>{{instrument.Name}}, {{instrument.Family}}: {{ instrument.YearsExperience }} years</p><img src="https://cdn0.iconfinder.com/data/icons/basic-ui-elements-plain/385/010_x-512.png" (click)="DeleteInstrument(instrument)">
+                <p>{{instrument.name}}, {{instrument.family}}: {{ instrument.yearsExperience }} years</p><img src="https://cdn0.iconfinder.com/data/icons/basic-ui-elements-plain/385/010_x-512.png" (click)="DeleteInstrument(instrument)">
             </div>
             <div class="form-row">
                 <div class="form-group col-sm-3">
                     <label>Name</label>
-                    <input class="form-control" type="text" name="InstrumentName" [(ngModel)]="Instrument.Name" placeholder="Name">
+                    <input class="form-control" type="text" name="InstrumentName" [(ngModel)]="Instrument.name" placeholder="Name">
                 </div>
                 <div class="form-group col-sm-3">
                     <label>Family</label>
-                    <select class="form-control" name="InstrumentFamily" [(ngModel)]="Instrument.Family" placeholder="Family">
+                    <select class="form-control" name="InstrumentFamily" [(ngModel)]="Instrument.family" placeholder="Family">
                         <option value="Woodwind">Woodwind</option>
                         <option value="Brass">Brass</option>
                         <option value="Percussion">Percussion</option>
@@ -55,13 +56,13 @@
                 </div>
                 <div class="form-group col-sm-4">
                     <label>Years of Experience</label>
-                    <input class="form-control" type="text" name="YearsExperience" [(ngModel)]="Instrument.YearsExperience" placeholder="Years of Experience">
+                    <input class="form-control" type="text" name="YearsExperience" [(ngModel)]="Instrument.yearsExperience" placeholder="Years of Experience">
                 </div>
                 <div class="form-group col-sm-1">
                     <a class="btn btn-success" (click)="AddInstrument()">Add</a>
                 </div>
             </div>
-            <input class="btn btn-success" type="submit" value="Register">
+            <input class="btn btn-success" type="submit" value="{{ action }}">
         </div>
     </form>
 </div>

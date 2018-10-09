@@ -1,6 +1,6 @@
 <div class="side-bar">
     <h3>Filter Musicians</h3>
-    <form>
+    <form (submit)="filterMusicians()">
         <h5>Location</h5>
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="Chicago">
@@ -11,7 +11,7 @@
             <label>New York</label>
         </div>
         <h5>Instrument</h5>
-        <button class="accordion" data-toggle="collapse" data-target="#woodwinds">Woodwinds<span>+</span></button>
+        <button type="button" class="accordion" data-toggle="collapse" data-target="#woodwinds">Woodwinds<span>+</span></button>
         <div class="panel collapse" id="woodwinds">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="All">
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <button class="accordion" data-toggle="collapse" data-target="#brass">Brass<span>+</span></button>
+        <button type="button" class="accordion" data-toggle="collapse" data-target="#brass">Brass<span>+</span></button>
         <div class="panel collapse" id="brass">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="All">
@@ -63,7 +63,7 @@
             </div>
         </div>
 
-        <button class="accordion" data-toggle="collapse" data-target="#percussion">Percussion<span>+</span></button>
+        <button type="button" class="accordion" data-toggle="collapse" data-target="#percussion">Percussion<span>+</span></button>
         <div class="panel collapse" id="percussion">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="All">
@@ -86,7 +86,7 @@
                 <label>Drumset</label>
             </div>
         </div>
-        <button class="accordion" data-toggle="collapse" data-target="#strings">Strings<span>+</span></button>
+        <button type="button" class="accordion" data-toggle="collapse" data-target="#strings">Strings<span>+</span></button>
         <div class="panel collapse" id="strings">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="All">
@@ -121,7 +121,7 @@
                 <label>Banjo</label>
             </div>
         </div>
-        <button class="accordion" data-toggle="collapse" data-target="#keyboard">Keyboard<span>+</span></button>
+        <button type="button" class="accordion" data-toggle="collapse" data-target="#keyboard">Keyboard<span>+</span></button>
         <div class="panel collapse" id="keyboard">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="All">
@@ -140,7 +140,7 @@
                 <label>Synthesizer</label>
             </div>
         </div>
-        <button class="accordion" data-toggle="collapse" data-target="#vocal">Vocal<span>+</span></button>
+        <button type="button" class="accordion" data-toggle="collapse" data-target="#vocal">Vocal<span>+</span></button>
         <div class="panel collapse" id="vocal">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="All">
@@ -167,7 +167,7 @@
                 <label>Jazz</label>
             </div>
         </div>
-        <button class="accordion" data-toggle="collapse" data-target="#other">Other<span>+</span></button>
+        <button type="button" class="accordion" data-toggle="collapse" data-target="#other">Other<span>+</span></button>
         <div class="panel collapse" id="other">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="All">
@@ -181,22 +181,26 @@
         <h5>Years of Experience</h5>
         <div class="slidecontainer">
             <p>Over {{ Filter.years }} year(s):</p>
-            <input type="range" min="1" max="25" class="slider" [ngModel]="Filter.years">
+            <input type="range" min="1" max="25" class="slider" name="Years" [(ngModel)]="Filter.years">
         </div>
         <input type="submit" class="btn btn-warning" value="Filter">
     </form>
 </div>
 <div class="musicians">
-    <form class="search-bar">
-        <input class="form-control" type="text" placeholder="Search by name...">
-        <input type="submit" class="btn btn-success" value="Search">
+    <form class="search-bar" (submit)="filterMusicians()">
+        <div class="input-group mb-3">
+            <input class="form-control" type="text" placeholder="Search by name..." name="Name" [(ngModel)]="Filter.name">
+            <div class="input-group-append">
+                <input type="submit" class="btn btn-success" value="Search">
+            </div>
+        </div>
     </form>
     <div *ngFor="let musician of Musicians" class="musician">
         <div class="left">
             <div class="image-cropper" [ngStyle]="{ 'background-image': 'url(' + musician.imageUrl + ')'}"></div>
         </div>
         <div class="description">
-            <h2>{{ musician.musicianName }} </h2>
+            <h2><a [routerLink]="['/profile', musician.id]">{{ musician.musicianName }}</a></h2>
             <div class="offset">
                 <h5>{{ musician.location }}</h5>
                 <h5>Instruments:</h5>

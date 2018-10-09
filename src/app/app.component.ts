@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpService } from './http.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-root',
@@ -7,10 +8,11 @@ import { HttpService } from './http.service';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+    Name = null;
     title = 'main';
     loggedInUser = null;
 
-    constructor(private _httpService: HttpService) {
+    constructor(private _httpService: HttpService, private router: Router) {
     }
 
     getUser() {
@@ -20,4 +22,9 @@ export class AppComponent {
             return data;
         });
     };
+
+    filterMusicians() {
+        console.log(this.Name);
+        this.router.navigate(["/musicians", this.Name]);
+    }
 }

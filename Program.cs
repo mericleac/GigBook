@@ -17,8 +17,12 @@ namespace GigBook
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseStartup<Startup>()
+                .UseIISIntegration()
+                .Build();
     }
 }

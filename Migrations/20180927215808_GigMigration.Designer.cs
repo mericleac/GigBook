@@ -3,14 +3,16 @@ using System;
 using GigBook.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GigBook.Migrations
 {
     [DbContext(typeof(GigBookContext))]
-    partial class GigBookContextModelSnapshot : ModelSnapshot
+    [Migration("20180927215808_GigMigration")]
+    partial class GigMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,11 +31,13 @@ namespace GigBook.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<DateTime>("EndTime");
+                    b.Property<int>("Length");
 
                     b.Property<bool>("MusicianConfirm");
 
-                    b.Property<string>("MusicianId");
+                    b.Property<int>("MusicianId");
+
+                    b.Property<string>("MusicianId1");
 
                     b.Property<int>("ReviewId");
 
@@ -45,13 +49,15 @@ namespace GigBook.Migrations
 
                     b.Property<bool>("UserConfirm");
 
-                    b.Property<string>("UserId");
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1");
 
                     b.HasKey("GigId");
 
-                    b.HasIndex("MusicianId");
+                    b.HasIndex("MusicianId1");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Gigs");
                 });
@@ -257,11 +263,11 @@ namespace GigBook.Migrations
                 {
                     b.HasOne("GigBook.Models.User", "Musician")
                         .WithMany()
-                        .HasForeignKey("MusicianId");
+                        .HasForeignKey("MusicianId1");
 
                     b.HasOne("GigBook.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("GigBook.Models.Instrument", b =>

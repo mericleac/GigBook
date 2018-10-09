@@ -28,3 +28,15 @@
     width: 65%;
     padding: 2% 10%;
 }
+
+.btn {
+    width: 35%;
+}
+
+.btn-danger {
+    margin-left: 5%;
+}
+
+.text-muted {
+    display: block;
+}
